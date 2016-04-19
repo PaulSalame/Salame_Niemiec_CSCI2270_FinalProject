@@ -6,8 +6,8 @@
 struct Event{
     std::string name;
     std::string description;
-    int timeStart[3];
-    int timeEnd[3];
+    std::string timeStart;
+    std::string timeEnd;
     int urgency;
 };
 
