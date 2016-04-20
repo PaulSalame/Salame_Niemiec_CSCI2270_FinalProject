@@ -29,7 +29,7 @@ class Calendar
     protected:
     private:
         Event *findEvent(std::string title);
-        std::vector<Event> days;
+        std::vector<Event*> days[7];
 };
 
 #endif // CALENDAR_H
