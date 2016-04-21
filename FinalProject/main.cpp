@@ -19,8 +19,7 @@ int main()
     while(true){
         cout << "What would you like to do?" << endl;
         cout << "Press 'a' to add an event" << endl;
-        cout << "Press 't' to show today's events" << endl;
-        cout << "Press 'd' to show the events on a specific day" << endl;
+        cout << "Press 't' to show a day's events" << endl;
         cout << "Press 'w' to show the week's events" << endl;
         cout << "Press 's' to show the slots for a specific time period" << endl;
         cout << "Press 'd' to delete a specific event" << endl;
@@ -29,6 +28,8 @@ int main()
         cout << "Press 'q' to exit the program" << endl;
         getline(cin, response);
         if(response == "a"){
+            cout<< "What day is your event on (ex. Monday)"<<endl;
+            getline(cin,date);
             cout << "What is the title of your event?" << endl;
             getline(cin, title);
             cout << "Give a brief description of the event: " << endl;
@@ -38,10 +39,12 @@ int main()
             cout << "Enter finishing hour (ex. 9:15)" << endl;
             getline(cin, timeEnd);
 
-            schedule.addEvent(title, description, timeStart, timeEnd);
+            schedule.addEvent(date,title, description, timeStart, timeEnd);
         }
         else if(response == "t"){
-            schedule.showTodaysEvents();
+            cout<<"Enter a day (eg. Monday)"<<endl;
+            getline(cin,date);
+            schedule.showTodaysEvents(date);
         }
         else if(response == "w"){
             schedule.printWeek();
