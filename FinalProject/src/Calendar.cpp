@@ -59,9 +59,9 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
     int * startTime=convertTime(timeStart);
     int * endTime=convertTime(timeEnd);
     int day = convertDate(date);
-    Event * newEvent = new Event(title,description,startTime,endTime);
-
+    Event * newEvent = new Event(title,description,startTime,endTime); //new event
     newEvent->date=date;
+
     if (days[day]==NULL){ //if the list is empty
         days[day]=newEvent;
     }
@@ -71,10 +71,13 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
 
 }
 
-void Calendar::showTodaysEvents(string date){
+void Calendar::showTodaysEvents(string date){ //Show the events for a day that the user inputs
     cout << date<<" events showed!" << endl;
     int day = convertDate(date);
     Event *temp = days[day];
+    if (temp==NULL){
+        cout<<"No events on "<<date<<endl;
+    }
     while (temp!=NULL){
         cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<temp->timeStart[0]<<":"<<temp->timeStart[1]<<"  ";
         cout<<"End Time: "<<temp->timeEnd[0]<<":"<<temp->timeEnd[1]<<endl;
