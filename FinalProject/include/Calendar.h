@@ -12,12 +12,14 @@ struct Event{
     std::string date;
     Event * next;
     Event(){};
-    Event(std::string n, std::string des, int timeStart,int timeEnd)
+    Event(std::string n, std::string des, int start[2],int end[2])
     {
         name = n;
         description = des;
-        timeStart = timeStart;
-        timeEnd=timeEnd;
+        timeStart[0] = start[0];
+        timeStart[1] = start[1];
+        timeEnd[0]=end[0];
+        timeEnd[1]=end[1];
     }
 };
 

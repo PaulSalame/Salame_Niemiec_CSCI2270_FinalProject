@@ -55,11 +55,12 @@ int convertDate(string date){ //Lets have the days vector start with Monday as i
 }
 
 void Calendar::addEvent(std::string date, std::string title, std::string description, string timeStart, string timeEnd){
-    cout << endl << "Your event:" << endl << title << endl << description << endl << timeStart << endl << timeEnd << endl << endl;
+    cout << endl << "Your event:" << endl << title << endl << description << endl << timeStart << endl << timeEnd << endl;
     int * startTime=convertTime(timeStart);
     int * endTime=convertTime(timeEnd);
     int day = convertDate(date);
-    Event * newEvent = new Event(title,description,*startTime,*endTime);
+    Event * newEvent = new Event(title,description,startTime,endTime);
+
     newEvent->date=date;
     if (days[day]==NULL){ //if the list is empty
         days[day]=newEvent;
@@ -68,10 +69,6 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
         //if the list already has a head
     }
 
-
-
-
-
 }
 
 void Calendar::showTodaysEvents(string date){
@@ -79,7 +76,8 @@ void Calendar::showTodaysEvents(string date){
     int day = convertDate(date);
     Event *temp = days[day];
     while (temp!=NULL){
-        cout<<temp->name<<endl;
+        cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<temp->timeStart[0]<<":"<<temp->timeStart[1]<<"  ";
+        cout<<"End Time: "<<temp->timeEnd[0]<<":"<<temp->timeEnd[1]<<endl;
         temp=temp->next;
     }
 }
@@ -96,10 +94,11 @@ void Calendar::printWeek(){
 
         temp = days[i];
         if (temp!=NULL){
-            cout<<"==="<<temp->date<<"==="<<endl;
+            cout<<"==="<<temp->date<<"==="<<endl; //print the day
         }
         while (temp!=NULL){
-            cout<<"Event: "<<temp->name<<endl;
+            cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<temp->timeStart[0]<<":"<<temp->timeStart[1]<<"  ";
+        cout<<"End Time: "<<temp->timeEnd[0]<<":"<<temp->timeEnd[1]<<endl;
             temp=temp->next;
         }
 
