@@ -1,5 +1,9 @@
 #include "Calendar.h"
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+
 
 using namespace std;
 
@@ -10,8 +14,24 @@ Calendar::Calendar()
     // The constructor will need to be what reads in the text file, should we choose to create one
 }
 
+int* convertTime(string timeString){
+    int * time = new int[2];
+    string token = timeString.substr(0,timeString.find(':'));
+    time[0] = stod(token);
+    token = timeString.substr(timeString.find(':')+1,5);
+    time[1] = stod(token);
+    return time;
+
+}
+
 void Calendar::addEvent(std::string title, std::string description, string timeStart, string timeEnd){
     cout << endl << "Your event:" << endl << title << endl << description << endl << timeStart << endl << timeEnd << endl << endl;
+    int * startTime=convertTime(timeStart);
+    cout<<startTime[0]<<" "<<startTime[1]<<endl;;
+    int * endTime=convertTime(timeEnd);
+    cout<<endTime[0]<<" "<<endTime[1]<<endl;
+
+
 }
 
 void Calendar::showTodaysEvents(){
