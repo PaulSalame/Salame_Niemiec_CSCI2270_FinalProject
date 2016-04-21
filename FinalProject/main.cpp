@@ -17,6 +17,7 @@ int main()
     string date;
 
     while(true){
+        cout << "======MAIN MENU======"<<endl;
         cout << "What would you like to do?" << endl;
         cout << "Press 'a' to add an event" << endl;
         cout << "Press 't' to show a day's events" << endl;

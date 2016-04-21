@@ -60,6 +60,7 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
     int * endTime=convertTime(timeEnd);
     int day = convertDate(date);
     Event * newEvent = new Event(title,description,*startTime,*endTime);
+    newEvent->date=date;
     if (days[day]==NULL){ //if the list is empty
         days[day]=newEvent;
     }
@@ -92,9 +93,13 @@ void Calendar::printWeek(){
     cout << "Here's watchur doin' this week: " << endl;
     Event *temp;
     for (int i = 0; i<days.size();i++){
+
         temp = days[i];
+        if (temp!=NULL){
+            cout<<"==="<<temp->date<<"==="<<endl;
+        }
         while (temp!=NULL){
-            cout<<temp->name<<endl;
+            cout<<"Event: "<<temp->name<<endl;
             temp=temp->next;
         }
 

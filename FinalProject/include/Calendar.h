@@ -9,6 +9,7 @@ struct Event{
     int timeStart[2];
     int timeEnd[2];
     int urgency;
+    std::string date;
     Event * next;
     Event(){};
     Event(std::string n, std::string des, int timeStart,int timeEnd)
