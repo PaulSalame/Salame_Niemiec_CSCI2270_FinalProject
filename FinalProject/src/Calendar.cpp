@@ -11,7 +11,7 @@ using namespace std;
 Calendar::Calendar()
 {
 
-    cout << "Calendar created!" << endl;
+    //cout << "Calendar created!" << endl;
     //showTodaysEvents();
     for (int i = 0; i<7;i++){ //Initialize the pointers to NULL
         days.push_back(NULL);
@@ -28,30 +28,64 @@ int* convertTime(string timeString){ //Function to convert string time to intege
     return time;
 }
 
-int convertDate(string date){ //Lets have the days vector start with Monday as index[0]
-        if (date == "Monday"){
+int convertDate(string date){ //Lets have the days vector start with Sunday as index[0]
+        if (date == "Sunday"){
             return 0;
         }
-        if (date == "Tuesday"){
+        else if (date == "Monday"){
             return 1;
         }
-        if (date == "Wednesday"){
+        else if (date == "Tuesday"){
             return 2;
         }
-        if (date == "Thursday"){
+        else if (date == "Wednesday"){
             return 3;
         }
-        if (date == "Friday"){
+        else if (date == "Thursday"){
             return 4;
         }
-        if (date == "Saturday"){
+        else if (date == "Friday"){
             return 5;
         }
-        if (date == "Sunday"){
+        else if (date == "Saturday"){
             return 6;
         }
 
 
+
+}
+
+void Calendar::getTodaysDate(){
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    tm timeStruct = {};
+    timeStruct.tm_year = now->tm_year;
+    timeStruct.tm_mon = now->tm_mon;
+    timeStruct.tm_mday = now->tm_mday;
+    timeStruct.tm_hour = 12;    //  To avoid any doubts about summer time, etc.
+    mktime( &timeStruct );
+    string day;
+    if(timeStruct.tm_wday == 0){
+        day = "Sunday";
+    }else if(timeStruct.tm_wday == 1){
+        day = "Monday";
+    }else if(timeStruct.tm_wday == 2){
+        day = "Tuesday";
+    }else if(timeStruct.tm_wday == 3){
+        day = "Wednesday";
+    }else if(timeStruct.tm_wday == 4){
+        day = "Thursday";
+    }else if(timeStruct.tm_wday == 5){
+        day = "Friday";
+    }else if(timeStruct.tm_wday == 6){
+        day = "Saturday";
+    }
+
+    cout << "Today's date is " << day << " on "
+         << (now->tm_mon + 1) << '/'
+         << now->tm_mday << '/'
+         <<  (now->tm_year + 1900)
+         << endl;
 }
 
 void Calendar::addEvent(std::string date, std::string title, std::string description, string timeStart, string timeEnd){
@@ -135,6 +169,6 @@ Event *Calendar::findEvent(string title){
 
 Calendar::~Calendar()
 {
-    cout << "Calendar burned!" << endl;
+    //cout << "Calendar burned!" << endl;
     // The constructor will be what writes the information to the text file, if we do make it that far.
 }

@@ -38,6 +38,7 @@ class Calendar
         void deleteEvent(std::string title);
         void eventDetails(std::string title);
         void clearDay(std::string date);
+        void getTodaysDate();
     protected:
     private:
         Event *findEvent(std::string title);
