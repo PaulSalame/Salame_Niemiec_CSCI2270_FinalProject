@@ -88,11 +88,18 @@ void Calendar::getTodaysDate(){
          << endl;
 }
 
+double timeDouble(int time[]){ //Function to convert the array time into a double (easier to use for calculating conflicts in schedule)
+    double a = double(time[0]) + double(time[1])/60;
+    return a;
+
+}
+
 void Calendar::addEvent(std::string date, std::string title, std::string description, string timeStart, string timeEnd){
     cout << endl << "Your event:" << endl << title << endl << description << endl << timeStart << endl << timeEnd << endl;
     int * startTime=convertTime(timeStart);
     int * endTime=convertTime(timeEnd);
     int day = convertDate(date);
+    bool conflict = false;
     Event * newEvent = new Event(title,description,startTime,endTime); //new event
     newEvent->date=date;
 
@@ -101,6 +108,77 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
     }
     else{
         //if the list already has a head
+
+        //first check for conflicting events
+        Event *temp = days[day];
+        while (temp!=NULL){ //loop through each event in the day
+            //CASE 1: IF NEW EVENT START TIME IS DURING AN EXISTING EVENT
+            if (timeDouble(newEvent->timeStart) >= timeDouble(temp->timeStart) && timeDouble(newEvent->timeStart) <= timeDouble(temp->timeEnd)){
+                conflict = true;
+                cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
+            }
+            //CASE 2: IF NEW EVENT END TIME IS DURING AN EXISTING EVENT
+            else if (timeDouble(newEvent->timeEnd) <= timeDouble(temp->timeEnd) && timeDouble(newEvent->timeEnd) >= timeDouble(temp->timeStart)){
+                 conflict = true;
+                cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
+            }
+            //CASE 3: EXISTING EVENT STARTS DURING THE NEW EVENT
+            else if (timeDouble(temp->timeStart) >= timeDouble(newEvent->timeStart) && timeDouble(temp->timeStart) <= timeDouble(newEvent->timeEnd)){
+                 conflict = true;
+                cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
+            }
+
+            temp=temp->next;
+        }
+        if (conflict == false){
+            //IF NO CONFLICT IS FOUND, WE ADD EVENT IN ITS CORRECT ORDER IN THE LIST
+            Event * right;;
+            temp=days[day];
+
+            if (temp->next==NULL){ //if the only existing node is the head of the list (is in the array)
+                if (timeDouble(newEvent->timeStart) > timeDouble(temp->timeEnd)){//if the new event starts after the existing one
+                    temp->next=newEvent;
+                    newEvent->prev=temp;
+                }
+                else{ //if the new event starts before the existing one
+                        cout<<"TRUUU"<<endl;
+                    temp->prev=newEvent;
+                    newEvent->next=temp;
+                    days[day]=newEvent; //new Event is now the head of the linked list
+                }
+            }
+
+            else{ //IF THERE ARE MORE ELEMENTS THAN JUST THE HEAD
+                    right=days[day];
+                    while (timeDouble(right->timeStart)<timeDouble(newEvent->timeEnd)){ //get a pointer to the first event that starts after our new event ends
+                    right=right->next;
+                        if (right==NULL){
+                            break;
+                        }
+                    }
+
+                if (right==NULL){//IF THERE IS NO NODE THAT STARTS AFTER OUR NEW NODE... ADD NEW NODE TO END OF LINKED LIST
+                        temp=days[day];
+                        while (temp->next!=NULL){
+                            temp=temp->next; //get a pointer to end of list
+                        }
+                        temp->next=newEvent;
+                        newEvent->prev=temp;
+
+                }
+                else if (right==days[day]){//if our new event is before the head of list
+                    right->prev=newEvent;
+                    newEvent->next=right;
+                    days[day]=newEvent; //new Event is now the head of the linked list
+                }
+                else{ //if we are inserting before an element that is not the head
+                    right->prev->next=newEvent;
+                    right->prev=newEvent;
+                    newEvent->next=right;
+                    newEvent->prev=right->prev;
+                }
+        }
+        }
     }
 
 }

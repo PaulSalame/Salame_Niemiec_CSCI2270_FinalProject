@@ -11,8 +11,9 @@ struct Event{
     int urgency;
     std::string date;
     Event * next;
+    Event * prev;
     Event(){};
-    Event(std::string n, std::string des, int start[2],int end[2])
+    Event(std::string n, std::string des, int start[2],int end[2]) //constructor
     {
         name = n;
         description = des;
@@ -20,6 +21,8 @@ struct Event{
         timeStart[1] = start[1];
         timeEnd[0]=end[0];
         timeEnd[1]=end[1];
+        next=NULL;
+        prev=NULL;
     }
 };
 
