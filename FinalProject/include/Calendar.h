@@ -32,19 +32,19 @@ class Calendar
     public:
         Calendar();
         virtual ~Calendar();
-        void addEvent(std::string date, std::string title, std::string description, std::string timeStart, std::string timeEnd);
+        void addEvent(std::string date, std::string title, std::string description, std::string timeStart, std::string timeEnd); //Finished!
         // void addEvent(std::string title, int timeStart, int timeEnd); I don't know that this function overload was a good idea after all
-        void showTodaysEvents(std::string date);
+        void showTodaysEvents(std::string date);//Finished!
         void showOtherDayEvents(std::string date);
-        void printWeek();
+        void printWeek();//Finished!
         void printSlots(std::string date, std::string hourStart, std::string hourEnd);
-        void deleteEvent(std::string title);
+        void deleteEvent(std::string title);//Finished!
         void eventDetails(std::string title);
         void clearDay(std::string date);
-        void getTodaysDate();
+        void getTodaysDate();//Finished!
     protected:
     private:
-        Event *findEvent(std::string title);
+        Event *findEvent(std::string title);//Finished!
         std::vector<Event*> days;
 };
 

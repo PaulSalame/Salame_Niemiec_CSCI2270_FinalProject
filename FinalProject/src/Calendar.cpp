@@ -228,21 +228,67 @@ void Calendar::printSlots(string date, string hourStart, string hourEnd){
 
 void Calendar::deleteEvent(string title){
     cout << title << ". Deleted." << endl;
+    Event *node = findEvent(title);
+    if (node->prev==NULL){ //if the node to be deleted is the head of list
+            cout<<"true"<<endl;
+        days[convertDate(node->date)]=node->next;
+        if (node->next!=NULL){
+        node->next->prev=NULL;
+        }
+        delete node;
+    }
+    else if (node->next==NULL){ //if we are deleting the end of the list
+        node->prev->next=NULL;
+        delete node;
+    }
+    else{ //if we are deleting a middle node
+        node->prev->next=node->next;
+        node->next->prev=node->prev;
+        delete node;
+    }
 }
 
 void Calendar::eventDetails(string title){
-    cout << "Event title: " << title << endl;
-    cout << "Description: Something cool" << endl;
-    cout << "Start time: Some time" << endl;
-    cout << "End time: Some time later than the start time" << endl;
+    Event *node=findEvent(title);
+    cout << "Event title: " << node->name << endl;
+    cout << "Description: "<<node->description << endl;
+    cout << "Day: "<<node->date<<endl;
+    cout << "Start time: "<<node->timeStart[0]<<":"<<node->timeStart[1]<<endl;
+    cout << "End time: "<<node->timeEnd[0]<<":"<<node->timeEnd[1]<<endl;
 }
 
 void Calendar::clearDay(string date){
     cout << date << ". Has. Been Cleared." << endl;
+        int day;
+        day = convertDate(date);
+        Event *right=days[day];
+        Event *left;
+        while (right->next!=NULL){ //pointer to end of list
+            right=right->next;
+        }
+            left=right->prev;
+        while(left!=NULL){
+            left=right->prev;
+            delete right;
+            right = left;
+        }
+        days[day]=NULL;
+
+
+
 }
 
 Event *Calendar::findEvent(string title){
-    cout << title << ". Found." << endl;
+
+    for (int i=0; i<7;i++){
+        Event *temp = days[i];
+        while (temp!=NULL){
+            if (temp->name==title){
+                return temp;
+            }
+            temp=temp->next;
+        }
+    }
 }
 
 Calendar::~Calendar()
