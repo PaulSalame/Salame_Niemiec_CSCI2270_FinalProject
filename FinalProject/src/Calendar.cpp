@@ -19,7 +19,7 @@ Calendar::Calendar()
     // The constructor will need to be what reads in the text file, should we choose to create one
 }
 
-int* convertTime(string timeString){ //Function to convert string time to integer array
+int* Calendar::convertTime(string timeString){ //Function to convert string time to integer array
     int * time = new int[2];
     string token = timeString.substr(0,timeString.find(':'));
     time[0] = stod(token);
@@ -28,7 +28,7 @@ int* convertTime(string timeString){ //Function to convert string time to intege
     return time;
 }
 
-int convertDate(string date){ //Lets have the days vector start with Sunday as index[0]
+int Calendar::convertDate(string date){ //Lets have the days vector start with Sunday as index[0]
         if (date == "Sunday"){
             return 0;
         }
@@ -88,7 +88,7 @@ void Calendar::getTodaysDate(){
          << endl;
 }
 
-double timeDouble(int time[]){ //Function to convert the array time into a double (easier to use for calculating conflicts in schedule)
+double Calendar::timeDouble(int time[]){ //Function to convert the array time into a double (easier to use for calculating conflicts in schedule)
     double a = double(time[0]) + double(time[1])/60;
     return a;
 
@@ -113,20 +113,20 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
         Event *temp = days[day];
         while (temp!=NULL){ //loop through each event in the day
             //CASE 1: IF NEW EVENT START TIME IS DURING AN EXISTING EVENT
-            if (timeDouble(newEvent->timeStart) >= timeDouble(temp->timeStart) && timeDouble(newEvent->timeStart) <= timeDouble(temp->timeEnd)){
+            if (timeDouble(newEvent->timeStart) > timeDouble(temp->timeStart) && timeDouble(newEvent->timeStart) < timeDouble(temp->timeEnd)){
                 conflict = true;
                 cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
             }
             //CASE 2: IF NEW EVENT END TIME IS DURING AN EXISTING EVENT
-            else if (timeDouble(newEvent->timeEnd) <= timeDouble(temp->timeEnd) && timeDouble(newEvent->timeEnd) >= timeDouble(temp->timeStart)){
+            else if (timeDouble(newEvent->timeEnd) < timeDouble(temp->timeEnd) && timeDouble(newEvent->timeEnd) > timeDouble(temp->timeStart)){
                  conflict = true;
                 cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
             }
             //CASE 3: EXISTING EVENT STARTS DURING THE NEW EVENT
-            else if (timeDouble(temp->timeStart) >= timeDouble(newEvent->timeStart) && timeDouble(temp->timeStart) <= timeDouble(newEvent->timeEnd)){
+            /*else if (timeDouble(temp->timeStart) >= timeDouble(newEvent->timeStart) && timeDouble(temp->timeStart) <= timeDouble(newEvent->timeEnd)){
                  conflict = true;
                 cout<<"Event: "<<temp->name<<" overlaps with this time interval"<<endl;
-            }
+            }*/ // This isn't necessary - if existing event starts during new event, then new event end time will be during existing event
 
             temp=temp->next;
         }
@@ -141,7 +141,7 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
                     newEvent->prev=temp;
                 }
                 else{ //if the new event starts before the existing one
-                        cout<<"TRUUU"<<endl;
+                    // cout<<"TRUUU"<<endl;
                     temp->prev=newEvent;
                     newEvent->next=temp;
                     days[day]=newEvent; //new Event is now the head of the linked list
@@ -184,6 +184,8 @@ void Calendar::addEvent(std::string date, std::string title, std::string descrip
 }
 
 void Calendar::showTodaysEvents(string date){ //Show the events for a day that the user inputs
+    string zeroHour;
+    string zeroMinute;
     cout << date<<" events showed!" << endl;
     int day = convertDate(date);
     Event *temp = days[day];
@@ -191,8 +193,24 @@ void Calendar::showTodaysEvents(string date){ //Show the events for a day that t
         cout<<"No events on "<<date<<endl;
     }
     while (temp!=NULL){
-        cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<temp->timeStart[0]<<":"<<temp->timeStart[1]<<"  ";
-        cout<<"End Time: "<<temp->timeEnd[0]<<":"<<temp->timeEnd[1]<<endl;
+        zeroHour = "";
+        zeroMinute = "";
+        if(temp->timeStart[0] == 0){
+            zeroHour = "0";
+        }
+        if(temp->timeStart[1] < 10){
+            zeroMinute = "0";
+        }
+        cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<zeroHour<<temp->timeStart[0]<<":"<<zeroMinute<<temp->timeStart[1]<<"  ";
+        zeroHour = "";
+        zeroMinute = "";
+        if(temp->timeEnd[0] == 0){
+            zeroHour = "0";
+        }
+        if(temp->timeEnd[1] < 10){
+            zeroMinute = "0";
+        }
+        cout<<"End Time: "<<zeroHour<<temp->timeEnd[0]<<":"<<zeroMinute<<temp->timeEnd[1]<<endl;
         temp=temp->next;
     }
 }
@@ -203,17 +221,34 @@ void Calendar::showOtherDayEvents(string date){
 }
 
 void Calendar::printWeek(){
+    string zeroHour;
+    string zeroMinute;
     cout << "Here's watchur doin' this week: " << endl;
     Event *temp;
     for (int i = 0; i<days.size();i++){
-
         temp = days[i];
         if (temp!=NULL){
             cout<<"==="<<temp->date<<"==="<<endl; //print the day
         }
         while (temp!=NULL){
-            cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<temp->timeStart[0]<<":"<<temp->timeStart[1]<<"  ";
-        cout<<"End Time: "<<temp->timeEnd[0]<<":"<<temp->timeEnd[1]<<endl;
+            zeroHour = "";
+            zeroMinute = "";
+            if(temp->timeStart[0] == 0){
+                zeroHour = "0";
+            }
+            if(temp->timeStart[1] < 10){
+                zeroMinute = "0";
+            }
+            cout<<"Event: "<<temp->name<<"  "<<"Start Time: "<<zeroHour<<temp->timeStart[0]<<":"<<zeroMinute<<temp->timeStart[1]<<"  ";
+            zeroHour = "";
+            zeroMinute = "";
+            if(temp->timeEnd[0] == 0){
+                zeroHour = "0";
+            }
+            if(temp->timeEnd[1] < 10){
+                zeroMinute = "0";
+            }
+            cout<<"End Time: "<<zeroHour<<temp->timeEnd[0]<<":"<<zeroMinute<<temp->timeEnd[1]<<endl;
             temp=temp->next;
         }
 
@@ -223,7 +258,59 @@ void Calendar::printWeek(){
 }
 
 void Calendar::printSlots(string date, string hourStart, string hourEnd){
-    cout << "Here's when you have time on " << date << " between " << hourStart << " and " << hourEnd << endl;
+    int *opening = convertTime(hourStart);
+    int *closing = convertTime(hourEnd);
+    bool isFree = false;
+
+    int day = convertDate(date);
+    Event *temp = days[day];
+    cout << "On " << date << " you are free between " << endl;
+    if (temp==NULL){ // If there are no events, then they are free the whole time
+        cout << hourStart << " and " << hourEnd << endl;
+        return;
+    }
+    do{
+        if(((temp->timeStart[0] < opening[0]) || (temp->timeStart[0]==opening[0] && temp->timeStart[1] < opening[1])) && (((temp->timeEnd[0] > closing[0]) || (temp->timeEnd[0]==closing[0] && temp->timeEnd[1] > closing[1])))){
+            cout << "Just kidding. You have no time open." << endl; // Sorry it's so long. Basically this is in the case the there is an event that starts before the period and ends after the period
+        }
+        else if((temp->timeStart[0] > opening[0]) || (temp->timeStart[0]==opening[0] && temp->timeStart[1] > opening[1])){ // The case where the start of the first event is after the start time given
+            if((temp->timeStart[0] > closing[0]) || (temp->timeStart[0]==closing[0] && temp->timeStart[1] > closing[1])){ // Checking if the first event is after the time slot
+                cout << hourStart << " and " << hourEnd << endl; // Then they will be free the whole time
+                return;
+            }
+            else if((temp->timeEnd[0] > closing[0]) || (temp->timeEnd[0]==closing[0] && temp->timeEnd[1] > closing[1])){
+                cout << hourStart << " and " << temp->timeStart[0] << ':' << temp->timeStart[1] << endl;
+                return;
+            }
+            cout << hourStart << " and ";
+            cout << temp->timeStart[0] << ':' << temp->timeStart[1] << endl;
+            cout << temp->timeEnd[0] << ':' << temp->timeEnd[1] << " and ";
+            isFree = true;
+        }
+        else if((temp->timeStart[0] < opening[0]) || (temp->timeStart[0]==opening[0] && temp->timeStart[1] < opening[1])){ // The case where the start is before the time slot
+            if((temp->timeEnd[0] > opening[0]) || (temp->timeEnd[0]==opening[0] && temp->timeEnd[1] > opening[1])){ // If the end of the event falls after the beginning of the slot
+                cout << temp->timeEnd[0] << ':' << temp->timeEnd[1] << " and ";
+                isFree = false;
+            }
+            else{
+                cout << hourStart << " and " << hourEnd << endl;
+                return;
+            }
+        }
+        temp = temp->next;
+
+    }while(!isFree && temp != NULL);
+
+    while (temp!=NULL){
+        cout << temp->timeStart[0] << ':' << temp->timeStart[1] << endl;
+
+        if((temp->timeEnd[0] > closing[0]) || (temp->timeEnd[0]==closing[0] && temp->timeEnd[1] > closing[1])){
+            return;
+        }
+        cout << temp->timeEnd[0] << ':' << temp->timeEnd[1] << " and ";
+        temp=temp->next;
+    }
+    cout << hourEnd << endl;
 }
 
 void Calendar::deleteEvent(string title){
@@ -258,7 +345,7 @@ void Calendar::eventDetails(string title){
 }
 
 void Calendar::clearDay(string date){
-    cout << date << ". Has. Been Cleared." << endl;
+    cout << date << ". Has. Been. Cleared." << endl;
         int day;
         day = convertDate(date);
         Event *right=days[day];
@@ -273,8 +360,6 @@ void Calendar::clearDay(string date){
             right = left;
         }
         days[day]=NULL;
-
-
 
 }
 

@@ -44,6 +44,9 @@ class Calendar
         void getTodaysDate();//Finished!
     protected:
     private:
+        int convertDate(std::string date);
+        int* convertTime(std::string timeString);
+        double timeDouble(int time[]);
         Event *findEvent(std::string title);//Finished!
         std::vector<Event*> days;
 };
