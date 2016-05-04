@@ -42,9 +42,12 @@ class Calendar
         void eventDetails(std::string title);
         void clearDay(std::string date);
         void getTodaysDate();//Finished!
+        void deleteAll(); //ADDED
     protected:
     private:
         int convertDate(std::string date);
+        std::string convertDateBack(int day); //ADDED
+        bool isDateInCalender(std::string date); //ADDED
         int* convertTime(std::string timeString);
         double timeDouble(int time[]);
         Event *findEvent(std::string title);//Finished!

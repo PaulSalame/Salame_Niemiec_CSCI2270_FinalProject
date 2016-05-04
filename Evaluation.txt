@@ -1,0 +1,18 @@
+Wow. Your project is fanastic. The idea and implementation was spectacular. I loved how you guys included the current date and
+added the time. And most of the project is in prestine condition. I loved the sass you put into the project as well. Overall
+I would give you guys an A++. 
+
+However, I did manage to find one error:
+  When you delete a day's events of a day that does not exist in the week it gives you a segmentation error. For example
+  as soon as I started up the application, I chose option to delete events for one day and it gave me a segmentation error.
+  Therefore I added a helper function called "isDateInWeek" to return a false if the date is not in the week.
+  
+I also added:
+  A public function called "DeleteAll" which deletes every event in the week. I also used it as a deconstructor. 
+  A helper function called "ConvertDateBack" that converted day back to date to use for the DeleteALL function and the 
+  isDateInWeek function.
+  
+But seriously, 
+  incredible job you guys!
+  
+  
