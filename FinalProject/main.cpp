@@ -106,7 +106,9 @@ int main()
         cout << "Press 'd' to delete a specific event" << endl;
         cout << "Press 'l' to look for an event" << endl;
         cout << "Press 'c' to clear all events for a day" << endl;
+        cout << "Press 'dd' to clear all events for the week" <<endl;
         cout << "Press 'q' to exit the program" << endl;
+
 
         getline(cin, response);
 
@@ -215,6 +217,10 @@ int main()
             cout << "'Bout time. Have a nice day. Or something." << endl;
             break;
         }
+        else if (response == "dd"){
+            cout<<"Delete ALL"<<endl;
+            schedule.deleteAll();
+        }
         else{
             cout << "You're dead to me" << endl;
         }
@@ -222,3 +228,4 @@ int main()
 
     return 0;
 }
+
