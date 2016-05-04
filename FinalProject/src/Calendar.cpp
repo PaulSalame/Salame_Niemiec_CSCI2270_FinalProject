@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <stdlib.h>
 
 
 using namespace std;
@@ -22,12 +23,36 @@ Calendar::Calendar()
 int* Calendar::convertTime(string timeString){ //Function to convert string time to integer array
     int * time = new int[2];
     string token = timeString.substr(0,timeString.find(':'));
-    time[0] = stod(token);
+    time[0] = atoi( token.c_str() );
     token = timeString.substr(timeString.find(':')+1,5);
-    time[1] = stod(token);
+    time[1] = atoi( token.c_str() );
     return time;
 }
 
+//ADDED
+string Calendar::convertDateBack(int day){ //Added to convert back to string format for deleteALL and searching purposes
+    if(day==0){
+        return "Sunday";
+    }
+    else if (day == 1){
+        return "Monday";
+    }
+    else if (day == 2){
+        return "Tuesday";
+    }
+    else if (day == 3){
+        return "Wednesday";
+    }
+    else if (day ==4){
+        return "Thursday";
+    }
+    else if (day == 5){
+        return "Friday";
+    }
+    else if(day ==6){
+        return "Saturday";
+    }
+}
 int Calendar::convertDate(string date){ //Lets have the days vector start with Sunday as index[0]
         if (date == "Sunday"){
             return 0;
@@ -345,13 +370,16 @@ void Calendar::eventDetails(string title){
 }
 
 void Calendar::clearDay(string date){
-    cout << date << ". Has. Been. Cleared." << endl;
-        int day;
-        day = convertDate(date);
-        Event *right=days[day];
-        Event *left;
+
+
+    if(isDateInCalender(date)!= false){ //ADDED because you get a seg fault if you enter a date that is not in the week
+            cout << date << ". Has. Been. Cleared." << endl;
+            int day;
+            day = convertDate(date);
+            Event *right=days[day];
+            Event *left;
         while (right->next!=NULL){ //pointer to end of list
-            right=right->next;
+        right=right->next;
         }
             left=right->prev;
         while(left!=NULL){
@@ -360,7 +388,35 @@ void Calendar::clearDay(string date){
             right = left;
         }
         days[day]=NULL;
+    }
+    else{
+        cout<< date<< ". Is. Already. Empty."<<endl;
+    }
 
+
+}
+//ADDED:
+bool Calendar::isDateInCalender(string date){
+// This is needed since you cannot delete or call on a day that is not in the week
+    int day;
+    day = convertDate(date);
+    if(days[day]!=NULL){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+//ADDED:
+void Calendar::deleteAll(){
+//thought you guys would need a deconstructer
+    for(int i=0; i<7; i++){
+        Event *temp = days[i];
+        string day;
+        day = convertDateBack(i);
+        clearDay(day);
+
+    }
 }
 
 Event *Calendar::findEvent(string title){
@@ -378,6 +434,7 @@ Event *Calendar::findEvent(string title){
 
 Calendar::~Calendar()
 {
+    deleteAll();
     //cout << "Calendar burned!" << endl;
     // The constructor will be what writes the information to the text file, if we do make it that far.
 }
